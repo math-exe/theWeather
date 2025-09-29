@@ -1,0 +1,3 @@
+package openweather
+
+const apiURL = ""
