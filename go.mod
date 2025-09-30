@@ -1,4 +1,4 @@
-module github.com/math-exe/theWheater
+module github.com/math-exe/theWeather
 
 go 1.25.1
 
