@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
 	"github.com/math-exe/theWeather/internal/provider"
+	"github.com/math-exe/theWeather/internal/util"
 )
 
 const apiURL = "http://api.openweathermap.org/data/2.5/weather"
@@ -28,7 +30,9 @@ func NewClient(apiKey string) *Client {
 
 // FetchByCity busca os dados do tempo para uma cidade
 func (c *Client) FetchByCity(city string) (*provider.WeatherInfo, error) {
-	url := fmt.Sprintf("%s?q=%s&appid=%s&units=metric&lang=pt_br", apiURL, city, c.apiKey)
+	escapeCity := url.QueryEscape(city)
+
+	url := fmt.Sprintf("%s?q=%s&appid=%s&units=metric&lang=pt_br", apiURL, escapeCity, c.apiKey)
 
 	resp, err := c.httpClient.Get(url)
 	if err != nil {
@@ -55,6 +59,12 @@ func (c *Client) FetchByCity(city string) (*provider.WeatherInfo, error) {
 		City:        data.Name,
 		Description: strings.Title(data.Weather[0].Description),
 		Temperature: data.Main.Temp,
+		TempMin:     data.Main.TempMin,
+		TempMax:     data.Main.TempMax,
+		WindSpeed:   data.Wind.Speed * 3.6,
+		WindDir:     util.DegressToCardinal(data.Wind.Deg),
+		Sunrise:     time.Unix(data.Sys.Sunrise, 0),
+		Sunset:      time.Unix(data.Sys.Sunset, 0),
 		FetchedAt:   time.Now(),
 	}
 

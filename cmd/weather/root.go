@@ -24,7 +24,7 @@ func newRootCmd() *cobra.Command {
 			// 1. Primeiro carregamos as configuracoes
 			cfg, err := config.Load()
 			if err != nil {
-				return fmt.Errorf("Erro ao carregar configuracao: %w", err)
+				return fmt.Errorf("erro ao carregar configuracao: %w", err)
 			}
 			if cfg.APIKey == "" {
 				return fmt.Errorf("apiKey nula ou nao encontrada. Defina a variavel de ambiente OPENWEATHER_API_KEY no .env")
@@ -38,10 +38,10 @@ func newRootCmd() *cobra.Command {
 			city := strings.Join(args, " ")
 			weather, err := weatherSvc.GetWeatherByCity(city)
 			if err != nil {
-				return fmt.Errorf("Nao foi possivel obter o tempo para '%s':'%w'", city, err)
+				return fmt.Errorf("nao foi possivel obter o tempo para '%s':'%w'", city, err)
 			}
 
-			// 4. Por fim, exibimos o resultado
+			// 4. E por fim, demonstramos os dados
 			displayWeather(weather)
 
 			return nil
@@ -50,17 +50,33 @@ func newRootCmd() *cobra.Command {
 	return cmd
 }
 
-// displayWeather formata e exibe os dados no terminal(CLI)
+// displayWeather mostra o resultado no terminal(CLI)
 func displayWeather(w *provider.WeatherInfo) {
 	cityColor := color.New(color.FgHiYellow, color.Bold)
 	labelColor := color.New(color.FgWhite)
 	valueColor := color.New(color.FgHiCyan)
 
-	cityColor.Printf("Tempo em %s\n", w.City)
-	fmt.Println(strings.Repeat("-", 30))
-	labelColor.Printf("Descricao:	")
+	cityColor.Printf("Clima em %s\n", w.City)
+	fmt.Println(strings.Repeat("-", 38))
+
+	// Usando padding para alinhar os valores
+	labelColor.Printf("%-22s", "Descricao:")
 	valueColor.Printf("%s\n", w.Description)
-	labelColor.Printf("Temperatura:	")
+
+	labelColor.Printf("%-22s", "Temperatura atual:")
 	valueColor.Printf("%.1f°C\n", w.Temperature)
-	fmt.Println(strings.Repeat("-", 30))
+
+	labelColor.Printf("%-22s", "Temperatura minima:")
+	valueColor.Printf("%.1f°C\n", w.TempMin)
+
+	labelColor.Printf("%-22s", "Temperatura maxima:")
+	valueColor.Printf("%.1f°C\n", w.TempMax)
+
+	labelColor.Printf("%-22s", "Velocidade do vento:")
+	valueColor.Printf("%.2f km/h\n", w.WindSpeed)
+
+	labelColor.Printf("%-22s", "Direcao do vento:")
+	valueColor.Printf("%s\n", w.WindDir)
+
+	fmt.Println(strings.Repeat("-", 38))
 }

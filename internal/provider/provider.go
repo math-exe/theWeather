@@ -8,6 +8,12 @@ type WeatherInfo struct {
 	Description string
 	Temperature float64 // Celsius
 	FetchedAt   time.Time
+	TempMin     float64
+	TempMax     float64
+	WindSpeed   float64
+	WindDir     string // Aqui retorna em graus, entao, convertemos em direcao
+	Sunrise     time.Time
+	Sunset      time.Time
 }
 
 // WeatherProvider define o contrato para qualquer provedor de dados de tempo/clima
