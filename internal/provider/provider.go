@@ -6,6 +6,7 @@ import "time"
 type WeatherInfo struct {
 	City        string
 	Description string
+	IconCode    string  // Icon code do clima atual retornado pela API da OPENWEATHER
 	Temperature float64 // Celsius
 	FetchedAt   time.Time
 	TempMin     float64

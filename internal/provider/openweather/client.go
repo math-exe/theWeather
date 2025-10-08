@@ -58,6 +58,7 @@ func (c *Client) FetchByCity(city string) (*provider.WeatherInfo, error) {
 	weatherInfo := &provider.WeatherInfo{
 		City:        data.Name,
 		Description: strings.Title(data.Weather[0].Description),
+		IconCode:    data.Weather[0].Icon,
 		Temperature: data.Main.Temp,
 		TempMin:     data.Main.TempMin,
 		TempMax:     data.Main.TempMax,

@@ -7,6 +7,7 @@ type apiResponse struct {
 	Name    string `json:"name"`
 	Weather []struct {
 		Description string `json:"description"`
+		Icon        string `json:"icon"`
 	} `json:"weather"`
 	Main struct {
 		Temp    float64 `json:"temp"`

@@ -8,6 +8,7 @@ import (
 	"github.com/math-exe/theWeather/internal/provider"
 	"github.com/math-exe/theWeather/internal/provider/openweather"
 	"github.com/math-exe/theWeather/internal/service"
+	"github.com/math-exe/theWeather/internal/util"
 	"github.com/math-exe/theWeather/pkg/config"
 	"github.com/spf13/cobra"
 )
@@ -56,12 +57,16 @@ func displayWeather(w *provider.WeatherInfo) {
 	labelColor := color.New(color.FgWhite)
 	valueColor := color.New(color.FgHiCyan)
 
+	emoji := util.GetWeatherEmoji(w.IconCode)
+
+	fullDescription := fmt.Sprintf("%s %s", emoji, w.Description)
+
 	cityColor.Printf("Clima em %s\n", w.City)
 	fmt.Println(strings.Repeat("-", 38))
 
 	// Usando padding para alinhar os valores
 	labelColor.Printf("%-22s", "Descricao:")
-	valueColor.Printf("%s\n", w.Description)
+	valueColor.Printf("%s\n", fullDescription)
 
 	labelColor.Printf("%-22s", "Temperatura atual:")
 	valueColor.Printf("%.1f°C\n", w.Temperature)
